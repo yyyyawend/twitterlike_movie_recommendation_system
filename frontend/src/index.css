@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .icon {
+        @apply hidden xl:inline-flex p-2 h-10 w-10 bg-gray-200 rounded-full cursor-pointer hover:bg-gray-300;
+    }
+
+    .inputicon {
+    @apply cursor-pointer w-9 h-9 hover:bg-[#1d9bf0] hover:bg-opacity-10 flex items-center justify-center rounded-full transition ease-out;
+  }
+
+    .inputIcon {
+        @apply flex items-center space-x-1 hover:bg-gray-100
+        flex-grow justify-center p-2 rounded-xl cursor-pointer;
+    }
+
+    body .tagify {
+  --input-color: rgb(229 231 235);
+  --placeholder-color:rgb(107 114 128);
+  --tags-border-color:black
+  --tags-focus-border-color:black
+}
+}
