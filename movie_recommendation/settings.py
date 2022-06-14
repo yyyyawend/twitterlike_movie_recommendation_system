@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'forumUser',
     'frontend',
     'corsheaders',
-    'movie'
+    'movie',
+    'forum',
 ]
 
 MIDDLEWARE = [
@@ -141,4 +142,7 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_WHITELIST = [ 'http://localhost:3000', 'http://127.0.0.1:3000']
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 

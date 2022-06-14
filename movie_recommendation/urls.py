@@ -22,4 +22,6 @@ urlpatterns = [
     path('', include('forumUser.urls')),
 
     path('', include('movie.urls')),
+
+    path('', include('forum.urls')),
 ]

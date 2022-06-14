@@ -41,6 +41,10 @@ class Movie(models.Model):
     def __str__(self):
         return f'{self.title}({self.year})'
 
+    def calculate_vote_average(self):
+        ratings = self.ratings.all().values_list('rating', flat=True)
+        return format(sum(ratings) / len(ratings), '.1f')
+
 
 class Rating(models.Model):
     user = models.ForeignKey(ForumUser, related_name='ratings', on_delete=models.CASCADE)

@@ -17,8 +17,7 @@ class MovieSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_vote_average(self, obj):
-        ratings = obj.ratings.all().values_list('rating', flat=True)
-        return format(sum(ratings) / len(ratings), '.1f')
+        return obj.calculate_vote_average()
 
     # def get_content_base_recommendations(self, movie):
     #     cosine_sim = pd.read_csv('./cosine_sim.csv')
@@ -65,3 +64,10 @@ class RatingSerializer(serializers.ModelSerializer):
             defaults={'rating': validated_data.get('rating')},
         )
         return rating
+
+class MovieTagsSerializer(serializers.ModelSerializer):
+    value = serializers.CharField(source='title')
+
+    class Meta:
+        model = Movie
+        fields = ('value', 'id','year')
