@@ -18,7 +18,7 @@ function Header() {
             <div className="hidden lg:block flex items-center">
                 <img
                   className="h-8 w-auto"
-                  src={require("./images/title.png")}
+                  src="/assets/title.png"
                   alt="Movie"
                 />
             </div>

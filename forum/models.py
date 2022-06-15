@@ -15,7 +15,11 @@ class Post(models.Model):
     likes = models.ManyToManyField(ForumUser, blank=True, through="Like")
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-timestamp']
+
 class Like(models.Model):
     user = models.ForeignKey(ForumUser, related_name='likes', on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+

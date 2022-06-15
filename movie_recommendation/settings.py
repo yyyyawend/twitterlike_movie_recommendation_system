@@ -37,10 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_cleanup.apps.CleanupConfig',
     'rest_framework',
     'knox',
     'forumUser',
-    'frontend',
     'corsheaders',
     'movie',
     'forum',
@@ -144,5 +144,5 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = [ 'http://localhost:3000', 'http://127.0.0.1:3000']
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = '/medias/'
 

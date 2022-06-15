@@ -29,7 +29,12 @@ class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
-class forumUserSerializer(serializers.ModelSerializer):
+class ForumUserSerializer(serializers.ModelSerializer):
+    username= serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = ForumUser
-        fields = fields = '__all__'
+        fields = ["id","username","avatar","location","biography"]
+
+    def get_username(self, obj):
+        return obj.user.username

@@ -20,12 +20,11 @@ function App() {
   return (
   <>
     { localStorage.getItem("token") ? (
-     <div className="App">
-        <div className="h-screen bg-black overflow-hidden">
+     <div className="App h-screen bg-black overflow-y-auto overflow-hidden">
             <Header />
             <main className="flex">
                 <Sidebar />
-                <div className="flex-grow h-screen pb-44 pt-6 overflow-y-auto scrollbar-hide">
+                    <div className="flex-grow h-screen pb-44 pt-6 overflow-y-auto overflow-hidden">
                     <Router>
                       <Switch>
                         <Route path="/home" component={Home} exact />
@@ -33,10 +32,9 @@ function App() {
                         <Route path="/logout" component={Logout} exact />
                       </Switch>
                     </Router>
-                </div>
+                    </div>
                 <Widgets />
             </main>
-        </div>
     </div>):(
     <Login />
     )}

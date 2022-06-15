@@ -101,7 +101,7 @@ function Input(props) {
     let form_data = new FormData();
     form_data.append("text", input);
     form_data.append("user", localStorage.getItem("userid"));
-    if (tags) {
+    if (selectedTags) {
       JSON.parse(selectedTags).forEach((tag) => {
         form_data.append("movie", tag.id);
       });
@@ -119,7 +119,8 @@ function Input(props) {
         else return response.json();
       })
       .then((data) => {
-        console.log(data.result);
+        console.log(data);
+        props.callback(data)
         setInput("");
         setUploadFile(null);
         setSelectedFile(null);
@@ -131,9 +132,10 @@ function Input(props) {
   };
 
   return (
-    <div className=" border-b border-gray-700 p-3 flex space-x-3 overflow-y-scroll scrollbar-hide">
+    <div className="border-b border-gray-700 p-3 flex space-x-3">
       <img
-        src={require("../avatars/default_avatar.jpg")}
+        src="/assets/default_avatar.jpg"
+//
         alt=""
         className="h-11 w-11 rounded-full cursor-pointer"
       />
@@ -203,19 +205,10 @@ function Input(props) {
             <div className="inputicon">
               <CalendarIcon className="text-[#1d9bf0] h-[22px]" />
             </div>
-            {showEmojis && (
-              <Picker
-                onEmojiClick={addEmoji}
-                pickerStyle={{
-                  position: "absolute",
-                  marginTop: "400px",
-                  marginLeft: -40,
-                  maxWidth: "320px",
-                  borderRadius: "20px",
-                }}
-              />
-            )}
+
+
           </div>
+
 
           <button
             className="bg-[#1d9bf0] text-white rounded-full px-4 py-1.5 font-bold shadow-md hover:bg-[#1a8cd8] disabled:hover:bg-[#1d9bf0] disabled:opacity-50 disabled:cursor-default"
@@ -225,6 +218,16 @@ function Input(props) {
             Tweet
           </button>
         </div>
+         {showEmojis && (
+              <Picker
+                onEmojiClick={addEmoji}
+                pickerStyle={{
+                  position: "relative",
+                  marginLeft: 40,
+                  borderRadius: "20px",
+                }}
+              />
+            )}
       </div>
     </div>
   );
