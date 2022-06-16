@@ -19,8 +19,31 @@ import Moment from "react-moment";
 
 function Post({ id, post}) {
   const [comments, setComments] = useState([]);
-  const [likes, setLikes] = useState([]);
-  const [liked, setLiked] = useState(false);
+  const [likes_count, setLikes_count] = useState(post.likes_count);
+  const [liked, setLiked] = useState(post.liked);
+  const [errors, setErrors] = useState(false);
+
+
+  const likePost = ()  => {
+        const data ={user: localStorage.getItem("userid"),
+          post: id};
+
+        fetch('http://127.0.0.1:8000/api/post_like', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+
+          },
+          body: JSON.stringify(data)
+        })
+          .then(res => res.json())
+          .then(data => {
+              setLikes_count(data.likes_count);
+              setLiked(!liked)
+            }).catch((e) => {
+        console.log(e);
+      });
+  }
 
   return (
     <div
@@ -50,17 +73,25 @@ function Post({ id, post}) {
               </span>
             </div>
             ·{" "}
-            <span className="hover:underline text-sm sm:text-[15px]">
+            <span className="text-sm sm:text-[15px]">
               <Moment fromNow>{post?.timestamp?.toDate}</Moment>
             </span>
               <p className="text-[#d9d9d9] text-[15px] sm:text-base mt-0.5">
+               {post.movie.length>0 && (
+                 <p>{post.movie.map((tag) => (
+                        <a className="underline text-blue-500 hover:text-blue-700" href="#">#{tag.title}({tag.year}){" "}</a>
+                ))}</p>
+               )}
                 {post?.text}
               </p>
           </div>
+
           <div className="inputicon group flex-shrink-0 ml-auto">
             <DotsHorizontalIcon className="h-5 text-[#6e767d] group-hover:text-[#1d9bf0]" />
           </div>
         </div>
+
+
         {post?.image && (
                     <img src={post?.image} className="rounded-2xl max-w-[560px] max-h-[380px] object-cover mr-2"/>
             )}
@@ -88,10 +119,10 @@ function Post({ id, post}) {
 
           <div
             className="flex items-center space-x-1 group"
-//            onClick={(e) => {
-//              e.stopPropagation();
-//              likePost();
-//            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              likePost();
+            }}
           >
             <div className="inputicon group-hover:bg-pink-600/10">
               {liked ? (
@@ -100,13 +131,13 @@ function Post({ id, post}) {
                 <HeartIcon className="h-5 group-hover:text-pink-600" />
               )}
             </div>
-            {likes.length > 0 && (
+            {likes_count > 0 && (
               <span
                 className={`group-hover:text-pink-600 text-sm ${
                   liked && "text-pink-600"
                 }`}
               >
-                {likes.length}
+                {likes_count}
               </span>
             )}
           </div>
