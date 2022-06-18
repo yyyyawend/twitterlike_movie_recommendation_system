@@ -14,6 +14,7 @@ import Movies from "./components/center/movies";
 import Widgets from "./components/widgets";
 import Logout from "./components/logout"
 import Login from "./components/login"
+import MovieDetail from "./components/center/movieDetail"
 
 function App() {
 
@@ -27,9 +28,11 @@ function App() {
                     <div className="flex-grow h-screen pb-44 pt-6 overflow-y-auto overflow-hidden">
                     <Router>
                       <Switch>
-                        <Route path="/home" component={Home} exact />
+                        <Route path={["/", "/home"]} component={Home} exact />
                         <Route path="/movies" component={Movies} exact />
                         <Route path="/logout" component={Logout} exact />
+                        <Route path="/movies" component={Movies} exact />
+                        <Route path="/movie/:id/" component={MovieDetail} exact />
                       </Switch>
                     </Router>
                     </div>

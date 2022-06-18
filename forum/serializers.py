@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from forum.models import Post, Like
 from forumUser.serializers import ForumUserSerializer
-from movie.serializers import MovieSerializer
+from movie.serializers import MovieCardSerializer
 
 
 class PostCreateSerializer(serializers.ModelSerializer):
@@ -14,7 +14,7 @@ class PostCreateSerializer(serializers.ModelSerializer):
 class PostDetailSerializer(serializers.ModelSerializer):
     user = ForumUserSerializer(read_only=True)
     image = serializers.ImageField(max_length=None, use_url=True, allow_null=True, required=False)
-    movie = MovieSerializer(many=True, read_only=True)
+    movie = MovieCardSerializer(many=True, read_only=True)
     likes_count = serializers.SerializerMethodField()
     liked = serializers.SerializerMethodField()
 
@@ -27,13 +27,13 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
     def get_liked(self, obj):
         request = self.context.get('request', None)
-        if request:
+        if request.user:
             user = request.user
             like = Like.objects.filter(post_id=obj.post_id, user_id=user.id)
             if like:
                 return True
-            else:
-                return False
+        else:
+            return False
 
 
 class LikeSerializer(serializers.ModelSerializer):

@@ -1,14 +1,15 @@
 import Rating from './rating';
 
-function Movie( {result} ) {
+function Movie( {result,row} ) {
 
   return(
-     <div className="p-2 group cursor-pointer text-gray-200 transition duration-200 ease-in transform sm:hover:scale-x-105 ">
+     <div className={`${row && "h-80 min-w-[220px]"} p-2 group cursor-pointer text-gray-200 transition duration-200 ease-in transform sm:hover:scale-x-105`}>
+      <a href={`/movie/${result.id}`}>
       <img
-        className="w-full  xl:h-80 md:h-3/4 sm:h-3/4"
+        className="rounded-md w-full xl:h-80 md:h-3/4 sm:h-3/4"
         src={result.image_url}
         alt=""
-      />
+      /></a>
       <div className="p-2">
     <p className="flex items_center text-sm">
     <Rating key={result.id} movieid={result.id} vote_average={result.vote_average}/>
@@ -17,9 +18,9 @@ function Movie( {result} ) {
           {result.title}
         </h2>
         <p className="flex items-center text-sm opacity-0 group-hover:opacity-100">
-          {result.releaseDate} •{" "}
+          {result.releaseDate}
         </p>
-         <p className="truncate max-w-md text-sm opacity-0 group-hover:opacity-100">{result.overview}</p>
+         <p className="truncate max-w-md text-sm opacity-0 group-hover:opacity-100"><span>{result.genres?.map(genre => genre.name).join(' | ')}</span></p>
       </div>
     </div>
   )

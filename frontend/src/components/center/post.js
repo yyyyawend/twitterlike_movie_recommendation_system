@@ -1,4 +1,3 @@
-
 import {
   ChartBarIcon,
   ChatIcon,
@@ -79,7 +78,8 @@ function Post({ id, post}) {
               <p className="text-[#d9d9d9] text-[15px] sm:text-base mt-0.5">
                {post.movie.length>0 && (
                  <p>{post.movie.map((tag) => (
-                        <a className="underline text-blue-500 hover:text-blue-700" href="#">#{tag.title}({tag.year}){" "}</a>
+                        <a className="underline text-blue-500 hover:text-blue-700" href={`/movie/${tag.id}`}>
+                        #{tag.title}({tag.year}){" "}</a>
                 ))}</p>
                )}
                 {post?.text}

@@ -1,4 +1,5 @@
-from rest_framework.generics import ListAPIView, ListCreateAPIView, CreateAPIView
+from rest_framework.decorators import api_view
+from rest_framework.generics import ListAPIView, ListCreateAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
 from .serializers import *
@@ -10,7 +11,7 @@ from sklearn.metrics.pairwise import linear_kernel
 
 class MovieListView(ListAPIView):
     queryset = Movie.objects.all()
-    serializer_class = MovieSerializer
+    serializer_class = MovieCardSerializer
 
 
 class RatingCreateView(CreateAPIView):
@@ -35,6 +36,9 @@ class MovieTagsView(ListAPIView):
     serializer_class = MovieTagsSerializer
     pagination_class = None
 
+class MovieDetailView(RetrieveAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieDetailSerializer
 
 
 

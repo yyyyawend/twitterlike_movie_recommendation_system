@@ -7,6 +7,7 @@ function Home( ) {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
+    console.log(localStorage.getItem("token"));
     getPostList();
   }, []);
 

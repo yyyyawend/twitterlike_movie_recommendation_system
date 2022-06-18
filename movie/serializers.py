@@ -1,54 +1,8 @@
 import pandas as pd
 from rest_framework import serializers
 
-from movie.models import Movie, Rating
-from surprise import SVD, Dataset, Reader
-
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import linear_kernel
-
-
-class MovieSerializer(serializers.ModelSerializer):
-    vote_average = serializers.SerializerMethodField()
-    # svd_recommendations = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Movie
-        fields = '__all__'
-
-    def get_vote_average(self, obj):
-        return obj.calculate_vote_average()
-
-    # def get_content_base_recommendations(self, movie):
-    #     cosine_sim = pd.read_csv('./cosine_sim.csv')
-    #
-    #     indices=pd.read_csv('sim_to_movie.csv', header=None)
-    #     sim_to_movie = indices[1]
-    #
-    #     movie_to_sim=indices.set_index(1)
-    #     movie_to_sim=movie_to_sim[0]
-    #
-    #     idx = movie_to_sim[movie.id]
-    #     sim_scores = list(enumerate(cosine_sim[str(idx)]))
-    #     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    #     sim_scores = sim_scores[1:11]
-    #     movie_indices = [sim_to_movie[i[0]] for i in sim_scores]
-    #     return movie_indices
-    #
-    # def get_svd_recommendations(self,movies):
-    #     reader = Reader(rating_scale=(1, 10))
-    #     df=pd.DataFrame(list(Rating.objects.all().values('user','movie','rating')))
-    #     data = Dataset.load_from_df(df, reader)
-    #     trainset = data.build_full_trainset()
-    #     algo = SVD()
-    #     algo.fit(trainset)
-    #     movies=df[['movie']].drop_duplicates()
-    #     movies['est'] = movies['movie'].apply(lambda x: algo.predict(1,x).est)
-    #     movies_r = list(movies.sort_values('est', ascending=False)[:10]['movie'])
-    #     return movies_r
-    #
-    # def hybrid_recommendations(self):
-    #     pass
+from movie.models import Movie, Rating, Star, Director, Genres
+from movie.recommender import hybrid_recommendations
 
 
 
@@ -71,3 +25,60 @@ class MovieTagsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = ('value', 'id','year')
+
+class StarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Star
+        fields = '__all__'
+
+class DirectorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Director
+        fields = '__all__'
+
+class GenresSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Genres
+        fields = '__all__'
+
+class MovieCardSerializer(serializers.ModelSerializer):
+    vote_average = serializers.SerializerMethodField()
+    genres = GenresSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Movie
+        fields = ('id','title','year','image_url','releaseDate','genres','vote_average')
+
+    def get_vote_average(self, obj):
+        return obj.calculate_vote_average()
+
+class MovieDetailSerializer(serializers.ModelSerializer):
+    stars = StarSerializer(many=True, read_only=True)
+    directors = DirectorSerializer(many=True, read_only=True)
+    genres = GenresSerializer(many=True, read_only=True)
+    vote_average = serializers.SerializerMethodField()
+    recommendations=serializers.SerializerMethodField()
+
+    class Meta:
+        model = Movie
+        fields = ('id','title','year','image_url','releaseDate','overview','stars','directors','genres','vote_average','recommendations')
+
+    def get_vote_average(self, obj):
+        return obj.calculate_vote_average()
+
+    def get_recommendations(self,obj):
+        movie_ids=content_base_recommendations(obj,10)
+        movies= Movie.objects.filter(id__in=movie_ids)
+        movies_serializer=MovieCardSerializer(movies, many=True)
+        return movies_serializer.data
+
+    def get_recommendations(self,obj):
+        request = self.context.get('request', None)
+        if request.user:
+            user=request.user
+            movie_ids=hybrid_recommendations(obj,user.id,10)
+            movies= Movie.objects.filter(id__in=movie_ids)
+            movies_serializer=MovieCardSerializer(movies, many=True)
+            return movies_serializer.data
+
+
