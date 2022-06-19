@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from forum.models import Post, Like
+from forum.models import Post, Like, Comment
 from forumUser.serializers import ForumUserSerializer
 from movie.serializers import MovieCardSerializer
 
@@ -10,6 +10,10 @@ class PostCreateSerializer(serializers.ModelSerializer):
         model = Post
         fields = '__all__'
 
+class CommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
 
 class PostDetailSerializer(serializers.ModelSerializer):
     user = ForumUserSerializer(read_only=True)
@@ -17,10 +21,11 @@ class PostDetailSerializer(serializers.ModelSerializer):
     movie = MovieCardSerializer(many=True, read_only=True)
     likes_count = serializers.SerializerMethodField()
     liked = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ["post_id", "user", "text", "image", "movie", "timestamp", "likes_count", "liked"]
+        fields = ["post_id", "user", "text", "image", "movie", "timestamp", "likes_count", "liked","comments_count"]
 
     def get_likes_count(self, obj):
         return obj.likes.count()
@@ -34,6 +39,9 @@ class PostDetailSerializer(serializers.ModelSerializer):
                 return True
         else:
             return False
+
+    def get_comments_count(self, obj):
+        return obj.comments.count()
 
 
 class LikeSerializer(serializers.ModelSerializer):

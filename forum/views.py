@@ -9,8 +9,8 @@ from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 
-from forum.models import Post, Like
-from forum.serializers import PostCreateSerializer, PostDetailSerializer, LikeSerializer
+from forum.models import Post, Like, Comment
+from forum.serializers import PostCreateSerializer, PostDetailSerializer, LikeSerializer, CommentCreateSerializer
 
 
 class PostCreateView(APIView):
@@ -46,6 +46,15 @@ class LikeView(APIView):
                 serializer.save()
                 return Response({'likes_count': post.likes.count()}, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommentCreateView(CreateAPIView):
+      queryset = Comment.objects.all()
+      serializer_class = CommentCreateSerializer
+
+      def post(self, request, format=None):
+        print(request.data)
+        return super(CommentCreateView, self).post(request, format=None)
 
 
 

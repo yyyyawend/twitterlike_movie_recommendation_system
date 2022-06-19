@@ -13,7 +13,7 @@ import {
 } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
 import Moment from "react-moment";
-
+import Comment from "./comment"
 
 
 function Post({ id, post}) {
@@ -51,8 +51,6 @@ function Post({ id, post}) {
 
         <img
           src={post.user.avatar?post.user.avatar:"/assets/default_avatar.jpg"}
-//          {isLoggedIn ? <button>Logout</button> : <button>Login</button>}
-//          src="/assets/default_avatar.jpg"
           alt=""
           className="h-11 w-11 rounded-full mr-4"
         />
@@ -95,26 +93,12 @@ function Post({ id, post}) {
         {post?.image && (
                     <img src={post?.image} className="rounded-2xl max-w-[560px] max-h-[380px] object-cover mr-2"/>
             )}
+
         <div
           className="text-[#6e767d] flex justify-between w-10/12"
         >
-          <div
-            className="flex items-center space-x-1 group"
-            onClick={(e) => {
-              e.stopPropagation();
-//              setPostId(id);
-//              setIsOpen(true);
-            }}
-          >
-            <div className="inputicon group-hover:bg-[#1d9bf0] group-hover:bg-opacity-10">
-              <ChatIcon className="h-5 group-hover:text-[#1d9bf0]" />
-            </div>
-            {comments.length > 0 && (
-              <span className="group-hover:text-[#1d9bf0] text-sm">
-                {comments.length}
-              </span>
-            )}
-          </div>
+
+        <Comment post={post} />
 
 
           <div
