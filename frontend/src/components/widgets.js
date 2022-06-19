@@ -1,6 +1,3 @@
-import { SearchIcon } from '@heroicons/react/outline';
-import { DotsHorizontalIcon, VideoCameraIcon, ChevronDoubleRightIcon } from '@heroicons/react/solid';
-
 function Widgets() {
 
     return (

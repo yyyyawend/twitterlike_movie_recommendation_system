@@ -7,4 +7,3 @@ urlpatterns = [
     path('api/tags', MovieTagsView.as_view(), name='tags'),
     path('api/movies/<int:pk>', MovieDetailView.as_view(), name='movie_detail'),
 ]
-

@@ -1,8 +1,8 @@
 import SidebarRow from './sidebarrow';
+import Logout from "../components/logout"
 
 import {
     CalendarIcon,
-    ClockIcon,
     DesktopComputerIcon,
     UsersIcon
   } from '@heroicons/react/solid';
@@ -10,7 +10,6 @@ import {
       ChevronDownIcon,
       ShoppingBagIcon,
       UserGroupIcon,
-      LogoutIcon
   } from '@heroicons/react/outline';
 
 function Sidebar() {
@@ -22,7 +21,7 @@ function Sidebar() {
             <SidebarRow Icon={DesktopComputerIcon} title="Watch"/>
             <SidebarRow Icon={CalendarIcon} title="Events"/>
             <SidebarRow Icon={ChevronDownIcon} title="See More"/>
-            <SidebarRow Icon={LogoutIcon} title="Logout" url="/logout"/>
+            <Logout />
         </div>
     );
 }

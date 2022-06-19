@@ -5,8 +5,8 @@ import {
   PhotographIcon,
   XIcon,
 } from "@heroicons/react/outline";
-
 import { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import Picker from "emoji-picker-react";
 import Tags from "@yaireo/tagify/dist/react.tagify";
 import "@yaireo/tagify/dist/tagify.css";
@@ -71,20 +71,13 @@ function Input(props) {
     enforceWhitelist: true,
   };
 
-  const loadMovieTags = () => {
-    fetch("http://127.0.0.1:8000/api/tags", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setTags(data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  const loadMovieTags = async () => {
+    try {
+      const { data } = await axios.get("http://127.0.0.1:8000/api/tags");
+      setTags(data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -95,10 +88,10 @@ function Input(props) {
     inputRef.current.selectionEnd = cursorPosition;
   }, [cursorPosition]);
 
-  const sendPost = (e) => {
+  const sendPost = async (e) => {
     e.preventDefault();
 
-    let form_data = new FormData();
+    const form_data = new FormData();
     form_data.append("text", input);
     form_data.append("user", localStorage.getItem("userid"));
     if (selectedTags) {
@@ -110,32 +103,33 @@ function Input(props) {
       form_data.append("image", uploadFile, uploadFile.name);
     }
 
-    fetch("http://127.0.0.1:8000/api/create_post", {
-      method: "POST",
-      body: form_data,
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error(response.status);
-        else return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        props.callback(data)
-        setInput("");
-        setUploadFile(null);
-        setSelectedFile(null);
-        setSelectedTags(null);
-        setShowEmojis(false);
-        tagifyRef.current && tagifyRef.current.removeAllTags();
-      })
-      .catch((error) => console.log(error));
+    try {
+      const res = await axios.post(
+        "http://127.0.0.1:8000/api/create_post",
+        form_data,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      props.callback(res.data);
+      setInput("");
+      setUploadFile(null);
+      setSelectedFile(null);
+      setSelectedTags(null);
+      setShowEmojis(false);
+      tagifyRef.current && tagifyRef.current.removeAllTags();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
     <div className="border-b border-gray-700 p-3 flex space-x-3">
       <img
         src="/assets/default_avatar.jpg"
-//
+        //
         alt=""
         className="h-11 w-11 rounded-full cursor-pointer"
       />
@@ -205,10 +199,7 @@ function Input(props) {
             <div className="inputicon">
               <CalendarIcon className="text-[#1d9bf0] h-[22px]" />
             </div>
-
-
           </div>
-
 
           <button
             className="bg-[#1d9bf0] text-white rounded-full px-4 py-1.5 font-bold shadow-md hover:bg-[#1a8cd8] disabled:hover:bg-[#1d9bf0] disabled:opacity-50 disabled:cursor-default"
@@ -218,16 +209,16 @@ function Input(props) {
             Tweet
           </button>
         </div>
-         {showEmojis && (
-              <Picker
-                onEmojiClick={addEmoji}
-                pickerStyle={{
-                  position: "relative",
-                  marginLeft: 40,
-                  borderRadius: "20px",
-                }}
-              />
-            )}
+        {showEmojis && (
+          <Picker
+            onEmojiClick={addEmoji}
+            pickerStyle={{
+              position: "relative",
+              marginLeft: 40,
+              borderRadius: "20px",
+            }}
+          />
+        )}
       </div>
     </div>
   );

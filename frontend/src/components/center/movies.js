@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Movie from "./movie";
 
 function Movies() {
@@ -8,20 +9,13 @@ function Movies() {
     getMovieList();
   }, []);
 
-  const getMovieList = () => {
-    fetch("http://127.0.0.1:8000/api/movies", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setResults(data.results);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  const getMovieList = async () => {
+    try {
+      const res = await axios.get("http://127.0.0.1:8000/api/movies");
+      setResults(res.data.results);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

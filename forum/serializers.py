@@ -10,10 +10,12 @@ class PostCreateSerializer(serializers.ModelSerializer):
         model = Post
         fields = '__all__'
 
+
 class CommentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+
 
 class PostDetailSerializer(serializers.ModelSerializer):
     user = ForumUserSerializer(read_only=True)
@@ -25,7 +27,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["post_id", "user", "text", "image", "movie", "timestamp", "likes_count", "liked","comments_count"]
+        fields = ["post_id", "user", "text", "image", "movie", "timestamp", "likes_count", "liked", "comments_count"]
 
     def get_likes_count(self, obj):
         return obj.likes.count()

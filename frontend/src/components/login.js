@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -14,35 +15,29 @@ const Login = () => {
     }
   }, []);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-
     const user = {
       username: username,
       password: password,
     };
 
-    fetch("http://127.0.0.1:8000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.token) {
-          localStorage.clear();
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("userid", data.user.id);
-          window.location.replace("http://localhost:3000");
-        } else {
-          setUsername("");
-          setPassword("");
-          localStorage.clear();
-          setErrors(true);
-        }
-      });
+    try {
+      const res = await axios.post("http://127.0.0.1:8000/api/login", user);
+      localStorage.clear();
+      localStorage.setItem("token", res.data.token);
+      const forumUser = res.data.user;
+      localStorage.setItem("userid", forumUser.id);
+      localStorage.setItem("username", forumUser.username);
+      localStorage.setItem("useravatar", forumUser.avatar);
+      window.location.replace("http://localhost:3000");
+    } catch (err) {
+      console.error(err);
+      setUsername("");
+      setPassword("");
+      localStorage.clear();
+      setErrors(true);
+    }
   };
 
   return (
@@ -100,7 +95,10 @@ const Login = () => {
             <p className="mt-8 text-xs font-light text-center text-gray-700">
               {" "}
               Don't have an account?{" "}
-              <a href="#" className="font-medium text-orange-600 hover:underline">
+              <a
+                href="#"
+                className="font-medium text-orange-600 hover:underline"
+              >
                 Sign up
               </a>
             </p>

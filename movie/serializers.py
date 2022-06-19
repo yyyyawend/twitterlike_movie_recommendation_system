@@ -67,8 +67,9 @@ class MovieDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = (
-        'id', 'title', 'year', 'image_url', 'releaseDate', 'overview', 'stars', 'directors', 'genres', 'vote_average',
-        'recommendations')
+            'id', 'title', 'year', 'image_url', 'releaseDate', 'overview', 'stars', 'directors', 'genres',
+            'vote_average',
+            'recommendations')
 
     def get_vote_average(self, obj):
         return obj.calculate_vote_average()

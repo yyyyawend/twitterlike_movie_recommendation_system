@@ -1,9 +1,17 @@
 from django.contrib.auth.models import User
-from rest_framework import generics, permissions, status
+from django.db import IntegrityError
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import permissions, status
+from rest_framework.authtoken.models import Token
+from rest_framework.generics import GenericAPIView, UpdateAPIView, RetrieveAPIView
+from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from knox.models import AuthToken
-from .serializers import UserSerializer, RegisterSerializer, ChangePasswordSerializer
+
+from .models import ForumUser
+from .serializers import UserSerializer, RegisterSerializer, ChangePasswordSerializer, ForumUserSerializer
 
 from django.contrib.auth import login, authenticate
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -11,7 +19,7 @@ from knox.views import LoginView as KnoxLoginView
 
 
 # Register API
-class RegisterAPI(generics.GenericAPIView):
+class RegisterAPI(GenericAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request, *args, **kwargs):
@@ -24,6 +32,14 @@ class RegisterAPI(generics.GenericAPIView):
         })
 
 
+class UserAPI(RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+
 class LoginAPI(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
 
@@ -32,43 +48,9 @@ class LoginAPI(KnoxLoginView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
-        # return super(LoginAPI, self).post(request, format=None)
+        forumUser = ForumUser.objects.get(user_id=user.id)
+        forumUser_serializer = ForumUserSerializer(forumUser)
         return Response({
-            "user": UserSerializer(user).data,
+            "user": forumUser_serializer.data,
             "token": AuthToken.objects.create(user)[1]
         })
-
-
-class ChangePasswordView(generics.UpdateAPIView):
-    """
-    An endpoint for changing password.
-    """
-    serializer_class = ChangePasswordSerializer
-    model = User
-    permission_classes = (IsAuthenticated,)
-
-    def get_object(self, queryset=None):
-        obj = self.request.user
-        return obj
-
-    def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        serializer = self.get_serializer(data=request.data)
-
-        if serializer.is_valid():
-            # Check old password
-            if not self.object.check_password(serializer.data.get("old_password")):
-                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
-            # set_password also hashes the password that the user will get
-            self.object.set_password(serializer.data.get("new_password"))
-            self.object.save()
-            response = {
-                'status': 'success',
-                'code': status.HTTP_200_OK,
-                'message': 'Password updated successfully',
-                'data': []
-            }
-
-            return Response(response)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

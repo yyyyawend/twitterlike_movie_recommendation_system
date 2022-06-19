@@ -12,11 +12,13 @@ class Star(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+
 class Director(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return f'{self.name}'
+
 
 class Genres(models.Model):
     name = models.CharField(max_length=100)
@@ -26,7 +28,6 @@ class Genres(models.Model):
 
 
 class Movie(models.Model):
-
     title = models.CharField(max_length=100)
     year = models.CharField(max_length=10)
     image_url = models.URLField(max_length=200, blank=True)
