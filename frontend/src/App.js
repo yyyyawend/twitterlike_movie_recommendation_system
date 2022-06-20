@@ -12,11 +12,11 @@ import Login from "./components/login"
 import MovieDetail from "./components/center/movieDetail"
 
 function App() {
-    const [isAuthentication, SetIsAuthentication]=useState(true);
+    const [isAuthentication, SetIsAuthentication]=useState(false);
 
       useEffect(() => {
       checkAuthentication();
-  }, []);
+  }, [isAuthentication]);
 
     const checkAuthentication = async () => {
     try {

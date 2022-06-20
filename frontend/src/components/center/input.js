@@ -127,8 +127,8 @@ function Input(props) {
 
   return (
     <div className="border-b border-gray-700 p-3 flex space-x-3">
-      <img
-        src="/assets/default_avatar.jpg"
+     <img
+        src={localStorage.getItem("useravatar") !== "null"? localStorage.getItem("useravatar") : "/assets/default_avatar.jpg"}
         //
         alt=""
         className="h-11 w-11 rounded-full cursor-pointer"
@@ -206,7 +206,7 @@ function Input(props) {
             disabled={!input && !selectedFile}
             onClick={sendPost}
           >
-            Tweet
+            Post
           </button>
         </div>
         {showEmojis && (

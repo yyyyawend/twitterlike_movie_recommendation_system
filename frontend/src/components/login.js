@@ -5,15 +5,6 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (localStorage.getItem("token") !== null) {
-      window.location.replace("http://localhost:3000");
-    } else {
-      setLoading(false);
-    }
-  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -41,8 +32,6 @@ const Login = () => {
   };
 
   return (
-    <>
-      {loading === false && (
         <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
           <div className="w-full p-6 m-auto bg-white border-t-4 border-orange-600 rounded-md shadow-md border-top lg:max-w-md">
             <h1 className="text-3xl font-semibold text-center text-orange-600">
@@ -104,8 +93,6 @@ const Login = () => {
             </p>
           </div>
         </div>
-      )}
-    </>
   );
 };
 
