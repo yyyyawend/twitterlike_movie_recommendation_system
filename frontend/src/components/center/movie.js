@@ -1,15 +1,16 @@
 import Rating from "./rating";
 
 function Movie({ result, row }) {
+
   return (
     <div
       className={`${
-        row && "h-80 min-w-[220px]"
+        row && "h-72 min-w-[220px]"
       } p-2 group cursor-pointer text-gray-200 transition duration-200 ease-in transform sm:hover:scale-x-105`}
     >
       <a href={`/movie/${result.id}`}>
         <img
-          className="rounded-md w-full xl:h-80 md:h-3/4 sm:h-3/4"
+          className="rounded-md w-11/12 xl:h-72 md:h-3/5 sm:h-3/4"
           src={result.image_url}
           alt=""
         />

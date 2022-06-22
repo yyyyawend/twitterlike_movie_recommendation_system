@@ -24,6 +24,7 @@ class PostCreateView(APIView):
 class PostListView(ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostDetailSerializer
+    pagination_class = None
     permission_classes = [IsAuthenticated]
 
 

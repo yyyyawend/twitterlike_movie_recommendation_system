@@ -1,8 +1,5 @@
 from django.db import models
 
-# Create your models here.
-from django.urls import reverse
-
 from forumUser.models import ForumUser
 
 
@@ -42,10 +39,20 @@ class Movie(models.Model):
     def __str__(self):
         return f'{self.title}({self.year})'
 
-    def calculate_vote_average(self):
-        ratings = self.ratings.all().values_list('rating', flat=True)
-        return format(sum(ratings) / len(ratings), '.1f')
+    class Meta:
+        ordering = ['title']
 
+    @property
+    def vote_average(self):
+        ratings = self.ratings.all().values_list('rating', flat=True)
+        if len(ratings):
+            return round(sum(ratings) / len(ratings),1)
+        else:
+            return 0
+
+    @property
+    def vote_count(self):
+        return self.ratings.count()
 
 class Rating(models.Model):
     user = models.ForeignKey(ForumUser, related_name='ratings', on_delete=models.CASCADE)

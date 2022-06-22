@@ -9,10 +9,10 @@ import Home from "./components/center/home";
 import Movies from "./components/center/movies";
 import Widgets from "./components/widgets";
 import Login from "./components/login"
-import MovieDetail from "./components/center/movieDetail"
+import MovieDetail from "./components/center/moviedetail"
 
 function App() {
-    const [isAuthentication, SetIsAuthentication]=useState(false);
+    const [isAuthentication, SetIsAuthentication]=useState(true);
 
       useEffect(() => {
       checkAuthentication();
@@ -41,7 +41,7 @@ function App() {
                     <div className="flex-grow h-screen pb-44 pt-6 overflow-y-auto overflow-hidden">
                     <Router>
                       <Switch>
-                        <Route path={["/", "/home"]} component={Home} exact />
+                        <Route path={["/", "/home"]} component={props => <Home {...props} />} exact />
                         <Route path="/movies" component={Movies} exact />
                         <Route path="/movies" component={Movies} exact />
                         <Route path="/movie/:id/" component={MovieDetail} exact />

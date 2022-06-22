@@ -1,19 +1,12 @@
-from django.contrib.auth.models import User
-from django.db import IntegrityError
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import permissions, status
-from rest_framework.authtoken.models import Token
-from rest_framework.generics import GenericAPIView, UpdateAPIView, RetrieveAPIView
-from rest_framework.parsers import JSONParser
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
+from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from knox.models import AuthToken
 
 from .models import ForumUser
-from .serializers import UserSerializer, RegisterSerializer, ChangePasswordSerializer, ForumUserSerializer
+from .serializers import UserSerializer, RegisterSerializer, ForumUserSerializer
 
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 

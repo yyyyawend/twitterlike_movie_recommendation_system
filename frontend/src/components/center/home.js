@@ -12,12 +12,12 @@ function Home() {
 
   const getPostList = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/post_list", {
+      const  res  = await axios.get("http://127.0.0.1:8000/api/post_list", {
         headers: {
           Authorization: `Token ${localStorage.getItem("token")}`,
         },
       });
-      setResults(res.data.results);
+      setResults(res.data);
     } catch (err) {
       console.error(err);
     }

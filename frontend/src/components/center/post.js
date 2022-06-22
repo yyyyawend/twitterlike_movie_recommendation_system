@@ -4,8 +4,8 @@ import {
   ShareIcon,
 } from "@heroicons/react/outline";
 import Moment from "react-moment";
-import CommentButton from "./commentButton";
-import LikeButton from "./likeButton";
+import CommentButton from "./commentbutton";
+import LikeButton from "./likebutton";
 
 function Post({ id, post }) {
   return (
