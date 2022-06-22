@@ -16,7 +16,7 @@ function Post({ id, post }) {
         className="h-11 w-11 rounded-full mr-4"
       />
 
-      <div className="flex flex-col space-y-2 w-full">
+      <div className="flex flex-col space-y-2 max-w-[600px]">
         <div className="flex justify-between">
           <div className="text-[#6e767d]">
             <div className="inline-block group">
