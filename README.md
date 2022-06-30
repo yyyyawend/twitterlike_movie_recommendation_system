@@ -1,7 +1,7 @@
 # twitterlike_movie_recommendation_sysytem
 Django & React Full Stack Web App<br />
-content-based model + SVD collaborative filtering recommendation
-
+content-based model + SVD collaborative filtering recommendation<br /><br />
+[<img src="https://img.youtube.com/vi/IjBMpNve5uw/maxresdefault.jpg" width="80%">](https://youtu.be/IjBMpNve5uw)<br />
 
 ## Install Required Python Modules
     pip install -r requirements.txt
