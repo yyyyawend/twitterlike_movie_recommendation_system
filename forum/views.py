@@ -46,7 +46,13 @@ class LikeView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CommentCreateView(CreateAPIView):
-    queryset = Comment.objects.all()
-    serializer_class = CommentCreateSerializer
+class CommentCreateView(APIView):
     permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        serializer = CommentCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            post = get_object_or_404(Post, pk=request.data["post"])
+            return Response({'comments_count': post.comments.count()}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -7,6 +7,7 @@ import axios from "axios";
 function CommentButton(props) {
   const [showModal, setShowModal] = useState(false);
   const [comment, setComment] = useState("");
+  const [comments_count, setCommentCount] = useState(props.post.comments_count)
   const post = props.post;
 
   const handleClose = () => {
@@ -21,12 +22,13 @@ function CommentButton(props) {
       body: comment,
     };
     try {
-      await axios.post("http://127.0.0.1:8000/api/post_comment", data,
+     const res =  await axios.post("http://127.0.0.1:8000/api/post_comment", data,
         {headers: {
                 Authorization: `Token ${localStorage.getItem("token")}`
             }}
       );
       setComment("");
+      setCommentCount(res.data.comments_count)
       setShowModal(false)
     } catch (err) {
       console.error(err);
@@ -47,7 +49,7 @@ function CommentButton(props) {
         </div>
         {post.comments_count > 0 && (
           <span className="group-hover:text-[#1d9bf0] text-sm">
-            {post.comments_count}
+            {comments_count}
           </span>
         )}
       </div>
