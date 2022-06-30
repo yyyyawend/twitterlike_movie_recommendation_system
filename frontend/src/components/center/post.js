@@ -62,7 +62,7 @@ function Post({ id, post }) {
         )}
 
         <div className="text-[#6e767d] flex justify-between w-10/12">
-          <CommentButton key={`comment ${post.post_id}`} post={post} />
+          <CommentButton key={post.post_id} post={post} />
 
           <LikeButton
           key={post.post_id}

@@ -29,6 +29,8 @@ function CommentButton(props) {
       );
       setComment("");
       setCommentCount(res.data.comments_count)
+      console.log(res.data.comments_count)
+      console.log(comments_count)
       setShowModal(false)
     } catch (err) {
       console.error(err);
