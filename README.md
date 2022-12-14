@@ -1,4 +1,4 @@
-# twitterlike_movie_recommendation_sysytem
+# twitterlike_movie_recommendation_system
 Django & React Full Stack Web App<br />
 content-based model + SVD collaborative filtering recommendation<br /><br />
 [<img src="https://img.youtube.com/vi/IjBMpNve5uw/maxresdefault.jpg" width="80%">](https://youtu.be/IjBMpNve5uw)<br />
